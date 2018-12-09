@@ -21,7 +21,9 @@ class History(Document):
     timestamp = DateTimeField(default=datetime.datetime.now())
 
     def create(self, visited_object):
-        self.tags = visited_object.tags
+        if not visited_object['tags']:
+            visited_object['tags'] = []
+        self.tags = visited_object['tags']
         self.save()
         return self
 
@@ -29,4 +31,19 @@ class CallQueue(Document):
     text = StringField()
     original_lang = StringField()
     is_done = BooleanField(default=False)
+    is_resp = BooleanField(default=False)
+
+
+class ResponsQueue(Document):
+    text = StringField()
+    original_lang = StringField()
+    is_readed = BooleanField(default=False)
+
+class Task(Document):
+    title = StringField()
+    description = StringField()
+    contact = StringField()
+    proposed_gain = StringField()
+
+
 

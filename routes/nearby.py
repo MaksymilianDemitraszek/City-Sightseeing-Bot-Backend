@@ -12,7 +12,7 @@ class Nearby(Resource):
     def get(self):
         args = loc_parser.parse_args()
         nearby = NearbyObjects().find(args['lat'], args['long'])
-        return nearby, 200
+        return {"nearby_objects": nearby}, 200
 
 
 
