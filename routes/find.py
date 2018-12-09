@@ -3,6 +3,8 @@ from flask_restful import Resource, reqparse
 from models.objects import Object, History
 from math import sin, cos, sqrt, atan2, radians
 
+from utils import router
+
 finder_parser = reqparse.RequestParser()
 finder_parser.add_argument('object', required=True)
 finder_parser.add_argument('lat', required=True)
@@ -17,12 +19,10 @@ object_parser.add_argument('long', required=True)
 class Find(Resource):
     def get(self):
         args = finder_parser.parse_args()
-        keywords = args['object'].split(' ')
+        key = args['object']
         obj = []
-
-        for key in keywords:
-            key = key.replace(" ", "").lower()
-            obj += Object.objects(__raw__={'tags': key}).as_pymongo()
+        key = key.replace(" ", "").lower()
+        obj += Object.objects(__raw__={'tags': key}).as_pymongo()
         if obj == []: return 404
         max_obj = obj[0]
         max_dis = 100000000000
@@ -31,9 +31,12 @@ class Find(Resource):
                 max_dis = distance(args['lat'], args['long'], o['latitude'], o['longitude'])
             max_obj = o
         History().create(max_obj)
-        return {'name': max_obj['name'], #kurwa co tu sie odpierdalaja nwm co sie dzieje ale chyba działa więcy wyjebaneee xDDDD
+        # route = router.FindRoute(args['lat'], args['long'], max_obj['latitude'], max_obj['longitude'])
+        route = router.FindRoute(float(args['lat']), float(args['long']), float(max_obj['latitude']), float(max_obj['longitude']))
+        return {'name': max_obj['name'],
                 'lat': max_obj['latitude'],
                 'long': max_obj['longitude'],
+                'bus': route
                 }, 200
 
 

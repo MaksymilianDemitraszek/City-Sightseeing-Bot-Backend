@@ -24,8 +24,19 @@ def voice():
     text.is_done = True
     text.save()
     resp.say(text.text, voice='alice')
-
+    # resp.record(timeout=10, transcribe=True)
     return str(resp)
+
+# @app.route("/callback", methods=['GET', 'POST'])
+# def callback():
+#
+#     resp = VoiceResponse()
+#     text = CallQueue.objects(is_done=False)[0]
+#     text.is_done = True
+#     text.save()
+#     resp.say(text.text, voice='alice')
+#     resp.record(timeout=10, transcribe=True)
+#     return str(resp)
 
 
 api.add_resource(Find, '/find')

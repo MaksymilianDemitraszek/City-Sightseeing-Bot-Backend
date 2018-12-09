@@ -80,7 +80,6 @@
 
 
 	function send() {
-    $("#text").val("");
 
 console.log('test');
 
@@ -115,6 +114,7 @@ console.log(url);
     	}).then(response => response.json())
 
 	.then(res => console.log(res))
+  $("#text").val("");
    $.alert({
 
     title: 'Response sent!',
